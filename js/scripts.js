@@ -132,11 +132,11 @@ const UI = (function () {
     const nodeListStatus = document.querySelectorAll(".status");
 
     nodeListDelete.forEach((btnElement) => {
-      btnElement.addEventListener("click", handleDelete.bind(btnElement));
+      btnElement.addEventListener("click", handleDelete);
     });
 
     nodeListStatus.forEach((btnElement) => {
-      btnElement.addEventListener("click", handleStatus.bind(btnElement));
+      btnElement.addEventListener("click", handleStatus);
     });
 
     nodeOverlay.addEventListener("click", handleCloseModal);
