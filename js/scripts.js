@@ -12,69 +12,46 @@ function BookFactory(title, author, pages, read) {
 
 const Library = (function () {
   let myLibrary = [
-    {
-      read: "pending",
-      pages: 342,
-      title: "Le guide de l'apprenti millionaire",
-      author: "Christopher Sojtarov",
-    },
-    {
-      read: "pending",
-      pages: 10,
-      title:
-        "Devenez riche: I Will Teach You to Be Rich - Un programme de 6 semaines qui fonctionne vraiment ",
-      author: "Ramit Sethi",
-    },
-    {
-      read: "pending",
-      pages: 812,
-      title: "L'argent, l'art de le maîtriser",
-      author: " Anthony Robbins",
-    },
-    {
-      read: "pending",
-      pages: 191,
-      title: "La chèvre de ma mère",
-      author: "Ricardo Kaniama",
-    },
-    {
-      read: "pending",
-      pages: 291,
-      title:
-        "La psychologie de l'argent: Quelques leçons intemporelles sur la richesse, la cupidité et le bonheur",
-      author: "Morgan Housel",
-    },
-    {
-      read: "pending",
-      pages: 100,
-      title:
-        "Le Quadrant du Cashflow: Un guide pour atteindre la liberté financière",
-      author: "Robert T. Kiyosaki",
-    },
-    {
-      read: "pending",
-      pages: 501,
-      title: "L'autoroute du millionnaire",
-      author: " MJ Demarco",
-    },
-    {
-      read: "pending",
-      pages: 188,
-      title: "L'homme le plus riche de Babylone",
-      author: "Georges Samuel Clason ",
-    },
-    {
-      read: "pending",
-      pages: 336,
-      title: "Père riche, père pauvre",
-      author: " Robert T. Kiyosaki ",
-    },
-    {
-      read: "pending",
-      pages: 254,
-      title: "Réfléchissez et devenez riche",
-      author: "Napoleon Hill",
-    },
+    BookFactory(
+      "Le guide de l'apprenti millionaire",
+      "Christopher Sojtarov",
+      342,
+      false
+    ),
+    BookFactory(
+      "Devenez riche: I Will Teach You to Be Rich - Un programme de 6 semaines qui fonctionne vraiment ",
+      "Ramit Sethi",
+      10,
+      false
+    ),
+    BookFactory(
+      "L'argent, l'art de le maîtriser",
+      " Anthony Robbins",
+      812,
+      false
+    ),
+    BookFactory("La chèvre de ma mère", "Ricardo Kaniama", 191, true),
+    BookFactory(
+      "La psychologie de l'argent: Quelques leçons intemporelles sur la richesse, la cupidité et le bonheur",
+      "Morgan Housel",
+      291,
+      false
+    ),
+    BookFactory(
+      "Le Quadrant du Cashflow: Un guide pour atteindre la liberté financière",
+      "Robert T. Kiyosaki",
+      100,
+      false
+    ),
+    BookFactory("L'autoroute du millionnaire", "MJ Demarco", 501, false),
+    BookFactory(
+      "L'homme le plus riche de Babylone",
+      "Georges Samuel Clason",
+      188,
+      true
+    ),
+    BookFactory("Père riche, père pauvre", "Robert T. Kiyosaki", 336, true),
+    BookFactory("Réfléchissez et devenez riche", "Napoleon Hill", 254, true),
   ];
 
   function addBookToLibrary(u_title, u_author, u_pages, u_read) {
