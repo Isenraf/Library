@@ -40,10 +40,6 @@ header > div p {
   color: var(--cl-tx);
 }
 
-header h1 {
-  font-family: "Rubik Glitch", cursive;
-}
-
 header button {
   font-size: 12px;
   font-weight: 600;

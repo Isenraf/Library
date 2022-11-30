@@ -1,99 +1,102 @@
 "use strict";
 
-function BookFactory(title, author, pages, read) {
-  const status = read ? "read" : "pending";
+class Book {
+  title;
+  author;
+  pages;
+  read;
 
-  function info() {
-    return `${title} by ${author}, ${pages}, ${read ? "read" : "not read yet"}`;
+  constructor(title, author, pages, read) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.read = read ? "read" : "pending";
   }
 
-  return { title, author, pages, read: status, info };
+  info() {
+    return `${title} by ${author}, ${pages}, ${read ? "read" : "not read yet"}`;
+  }
 }
 
-const Library = (function () {
-  let myLibrary = [
-    BookFactory(
+class Library {
+  myLibrary = [
+    new Book(
       "Le guide de l'apprenti millionaire",
       "Christopher Sojtarov",
       342,
       false
     ),
-    BookFactory(
+    new Book(
       "Devenez riche: I Will Teach You to Be Rich - Un programme de 6 semaines qui fonctionne vraiment ",
       "Ramit Sethi",
       10,
       false
     ),
-    BookFactory(
-      "L'argent, l'art de le maîtriser",
-      " Anthony Robbins",
-      812,
-      false
-    ),
-    BookFactory("La chèvre de ma mère", "Ricardo Kaniama", 191, true),
-    BookFactory(
+    new Book("L'argent, l'art de le maîtriser", " Anthony Robbins", 812, false),
+    new Book("La chèvre de ma mère", "Ricardo Kaniama", 191, true),
+    new Book(
       "La psychologie de l'argent: Quelques leçons intemporelles sur la richesse, la cupidité et le bonheur",
       "Morgan Housel",
       291,
       false
     ),
-    BookFactory(
+    new Book(
       "Le Quadrant du Cashflow: Un guide pour atteindre la liberté financière",
       "Robert T. Kiyosaki",
       100,
       false
     ),
-    BookFactory("L'autoroute du millionnaire", "MJ Demarco", 501, false),
-    BookFactory(
+    new Book("L'autoroute du millionnaire", "MJ Demarco", 501, false),
+    new Book(
       "L'homme le plus riche de Babylone",
       "Georges Samuel Clason",
       188,
       true
     ),
-    BookFactory("Père riche, père pauvre", "Robert T. Kiyosaki", 336, true),
-    BookFactory("Réfléchissez et devenez riche", "Napoleon Hill", 254, true),
+    new Book("Père riche, père pauvre", "Robert T. Kiyosaki", 336, true),
+    new Book("Réfléchissez et devenez riche", "Napoleon Hill", 254, true),
   ];
 
-  function addBookToLibrary(u_title, u_author, u_pages, u_read) {
-    const newBook = BookFactory(u_title, u_author, u_pages, u_read);
-    myLibrary.push(newBook);
+  addBookToLibrary(u_title, u_author, u_pages, u_read) {
+    const newBook = new Book(u_title, u_author, u_pages, u_read);
+    this.myLibrary.push(newBook);
   }
 
-  function getAllBooks() {
-    return myLibrary;
+  getAllBooks() {
+    return this.myLibrary;
   }
 
-  function deleteBook(id) {
-    const newLibrary = myLibrary.filter((_, bookId) => bookId !== id);
-    myLibrary = newLibrary;
+  deleteBook(id) {
+    const newLibrary = this.myLibrary.filter((_, bookId) => bookId !== id);
+    this.myLibrary = newLibrary;
   }
 
-  function updateBook(id) {
-    const book = myLibrary[id];
+  updateBook(id) {
+    const book = this.myLibrary[id];
     book.read = book.read === "pending" ? "read" : "pending";
   }
-
-  return { getAllBooks, deleteBook, updateBook, addBookToLibrary };
-})();
+}
 
 // UI
-const UI = (function () {
-  const containerBooks = document.querySelector("tbody");
-  const containerTotalBooks = document.querySelector(".total");
+class UI {
+  Library = new Library();
 
-  const nodeOpenModal = document.querySelector(".open-modal");
-  const nodeModal = document.querySelector(".modal");
-  const nodeOverlay = document.querySelector(".overlay");
-  const nodeCloseModal = document.querySelector(".close-modal");
+  containerBooks = document.querySelector("tbody");
+  containerTotalBooks = document.querySelector(".total");
 
-  const nodeForm = document.querySelector("form");
-  const nodeTitle = document.querySelector("#title");
-  const nodeAuthor = document.querySelector("#author");
-  const nodePages = document.querySelector("#pages");
-  const nodeRead = document.querySelector("#read");
+  nodeOpenModal = document.querySelector(".open-modal");
+  nodeModal = document.querySelector(".modal");
+  nodeOverlay = document.querySelector(".overlay");
+  nodeCloseModal = document.querySelector(".close-modal");
 
-  function renderBooks() {
-    const markup = Library.getAllBooks()
+  nodeForm = document.querySelector("form");
+  nodeTitle = document.querySelector("#title");
+  nodeAuthor = document.querySelector("#author");
+  nodePages = document.querySelector("#pages");
+  nodeRead = document.querySelector("#read");
+
+  renderBooks() {
+    const markup = this.Library.getAllBooks()
       .map((book, id) => {
         return `
       <tr>
@@ -118,86 +121,99 @@ const UI = (function () {
       })
       .join("");
 
-    containerBooks.innerHTML = markup;
+    this.containerBooks.innerHTML = markup;
   }
 
-  function renderTotalBooks() {
-    containerTotalBooks.textContent = `There are ${
-      Library.getAllBooks().length
+  renderTotalBooks() {
+    this.containerTotalBooks.textContent = `There are ${
+      this.Library.getAllBooks().length
     } total books`;
   }
 
-  function addClick() {
+  addClick() {
     const nodeListDelete = document.querySelectorAll(".del");
     const nodeListStatus = document.querySelectorAll(".status");
 
     nodeListDelete.forEach((btnElement) => {
-      btnElement.addEventListener("click", handleDelete);
+      btnElement.addEventListener(
+        "click",
+        this.handleDelete.bind(this, +btnElement.dataset.id)
+      );
     });
 
     nodeListStatus.forEach((btnElement) => {
-      btnElement.addEventListener("click", handleStatus);
+      btnElement.addEventListener(
+        "click",
+        this.handleStatus.bind(this, +btnElement.dataset.id)
+      );
     });
 
-    nodeOverlay.addEventListener("click", handleCloseModal);
+    this.nodeOverlay.addEventListener(
+      "click",
+      this.handleCloseModal.bind(this)
+    );
 
-    nodeOpenModal.addEventListener("click", handleOpenModal);
+    this.nodeOpenModal.addEventListener(
+      "click",
+      this.handleOpenModal.bind(this)
+    );
 
-    nodeCloseModal.addEventListener("click", handleCloseModal);
+    this.nodeCloseModal.addEventListener(
+      "click",
+      this.handleCloseModal.bind(this)
+    );
   }
 
-  function addSubmit() {
-    nodeForm.addEventListener("submit", handleSubmitForm);
+  addSubmit() {
+    this.nodeForm.addEventListener("submit", this.handleSubmitForm.bind(this));
   }
 
-  function clearForm() {
-    nodeAuthor.value = "";
-    nodeTitle.value = "";
-    nodePages.value = "";
-    nodeRead.checked = false;
+  clearForm() {
+    this.nodeAuthor.value = "";
+    this.nodeTitle.value = "";
+    this.nodePages.value = "";
+    this.nodeRead.checked = false;
   }
 
-  function handleDelete() {
-    Library.deleteBook(+this.dataset.id);
-    init();
+  handleDelete(id) {
+    this.Library.deleteBook(id);
+    this.init();
   }
 
-  function handleStatus() {
-    Library.updateBook(+this.dataset.id);
-    init();
+  handleStatus(id) {
+    this.Library.updateBook(id);
+    this.init();
   }
 
-  function handleOpenModal() {
-    nodeModal.classList.remove("hidden");
-    nodeOverlay.classList.remove("hidden");
+  handleOpenModal() {
+    this.nodeModal.classList.remove("hidden");
+    this.nodeOverlay.classList.remove("hidden");
   }
 
-  function handleCloseModal() {
-    nodeModal.classList.add("hidden");
-    nodeOverlay.classList.add("hidden");
+  handleCloseModal() {
+    this.nodeModal.classList.add("hidden");
+    this.nodeOverlay.classList.add("hidden");
   }
 
-  function handleSubmitForm(e) {
+  handleSubmitForm(e) {
     e.preventDefault();
 
-    const bookAuthor = nodeAuthor.value;
-    const bookTitle = nodeTitle.value;
-    const bookPages = Math.abs(parseInt(nodePages.value));
-    const bookStatus = nodeRead.checked;
+    const bookAuthor = this.nodeAuthor.value;
+    const bookTitle = this.nodeTitle.value;
+    const bookPages = Math.abs(parseInt(this.nodePages.value));
+    const bookStatus = this.nodeRead.checked;
 
-    Library.addBookToLibrary(bookTitle, bookAuthor, bookPages, bookStatus);
-    clearForm();
-    init();
+    this.Library.addBookToLibrary(bookTitle, bookAuthor, bookPages, bookStatus);
+    this.clearForm();
+    this.init();
   }
 
-  function init() {
-    renderBooks();
-    renderTotalBooks();
-    addClick();
-    addSubmit();
+  init() {
+    this.renderBooks();
+    this.renderTotalBooks();
+    this.addClick();
+    this.addSubmit();
   }
+}
 
-  return { init };
-})();
-
-UI.init();
+new UI().init();
