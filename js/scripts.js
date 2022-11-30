@@ -1,3 +1,5 @@
+"use strict";
+
 class Book {
   title;
   author;
@@ -76,25 +78,25 @@ class Library {
 }
 
 // UI
-class UI {
-  Library = new Library();
+const UI = (function () {
+  const library = new Library();
+  const containerBooks = document.querySelector("tbody");
+  const containerTotalBooks = document.querySelector(".total");
 
-  containerBooks = document.querySelector("tbody");
-  containerTotalBooks = document.querySelector(".total");
+  const nodeOpenModal = document.querySelector(".open-modal");
+  const nodeModal = document.querySelector(".modal");
+  const nodeOverlay = document.querySelector(".overlay");
+  const nodeCloseModal = document.querySelector(".close-modal");
 
-  nodeOpenModal = document.querySelector(".open-modal");
-  nodeModal = document.querySelector(".modal");
-  nodeOverlay = document.querySelector(".overlay");
-  nodeCloseModal = document.querySelector(".close-modal");
+  const nodeForm = document.querySelector("form");
+  const nodeTitle = document.querySelector("#title");
+  const nodeAuthor = document.querySelector("#author");
+  const nodePages = document.querySelector("#pages");
+  const nodeRead = document.querySelector("#read");
 
-  nodeForm = document.querySelector("form");
-  nodeTitle = document.querySelector("#title");
-  nodeAuthor = document.querySelector("#author");
-  nodePages = document.querySelector("#pages");
-  nodeRead = document.querySelector("#read");
-
-  renderBooks() {
-    const markup = this.Library.getAllBooks()
+  function renderBooks() {
+    const markup = library
+      .getAllBooks()
       .map((book, id) => {
         return `
       <tr>
@@ -119,99 +121,86 @@ class UI {
       })
       .join("");
 
-    this.containerBooks.innerHTML = markup;
+    containerBooks.innerHTML = markup;
   }
 
-  renderTotalBooks() {
-    this.containerTotalBooks.textContent = `There are ${
-      this.Library.getAllBooks().length
+  function renderTotalBooks() {
+    containerTotalBooks.textContent = `There are ${
+      library.getAllBooks().length
     } total books`;
   }
 
-  addClick() {
+  function addClick() {
     const nodeListDelete = document.querySelectorAll(".del");
     const nodeListStatus = document.querySelectorAll(".status");
 
     nodeListDelete.forEach((btnElement) => {
-      btnElement.addEventListener(
-        "click",
-        this.handleDelete.bind(this, +btnElement.dataset.id)
-      );
+      btnElement.addEventListener("click", handleDelete);
     });
 
     nodeListStatus.forEach((btnElement) => {
-      btnElement.addEventListener(
-        "click",
-        this.handleStatus.bind(this, +btnElement.dataset.id)
-      );
+      btnElement.addEventListener("click", handleStatus);
     });
 
-    this.nodeOverlay.addEventListener(
-      "click",
-      this.handleCloseModal.bind(this)
-    );
+    nodeOverlay.addEventListener("click", handleCloseModal);
 
-    this.nodeOpenModal.addEventListener(
-      "click",
-      this.handleOpenModal.bind(this)
-    );
+    nodeOpenModal.addEventListener("click", handleOpenModal);
 
-    this.nodeCloseModal.addEventListener(
-      "click",
-      this.handleCloseModal.bind(this)
-    );
+    nodeCloseModal.addEventListener("click", handleCloseModal);
   }
 
-  addSubmit() {
-    this.nodeForm.addEventListener("submit", this.handleSubmitForm.bind(this));
+  function addSubmit() {
+    nodeForm.addEventListener("submit", handleSubmitForm);
   }
 
-  clearForm() {
-    this.nodeAuthor.value = "";
-    this.nodeTitle.value = "";
-    this.nodePages.value = "";
-    this.nodeRead.checked = false;
+  function clearForm() {
+    nodeAuthor.value = "";
+    nodeTitle.value = "";
+    nodePages.value = "";
+    nodeRead.checked = false;
   }
 
-  handleDelete(id) {
-    this.Library.deleteBook(id);
-    this.init();
+  function handleDelete() {
+    library.deleteBook(+this.dataset.id);
+    init();
   }
 
-  handleStatus(id) {
-    this.Library.updateBook(id);
-    this.init();
+  function handleStatus() {
+    library.updateBook(+this.dataset.id);
+    init();
   }
 
-  handleOpenModal() {
-    this.nodeModal.classList.remove("hidden");
-    this.nodeOverlay.classList.remove("hidden");
+  function handleOpenModal() {
+    nodeModal.classList.remove("hidden");
+    nodeOverlay.classList.remove("hidden");
   }
 
-  handleCloseModal() {
-    this.nodeModal.classList.add("hidden");
-    this.nodeOverlay.classList.add("hidden");
+  function handleCloseModal() {
+    nodeModal.classList.add("hidden");
+    nodeOverlay.classList.add("hidden");
   }
 
-  handleSubmitForm(e) {
+  function handleSubmitForm(e) {
     e.preventDefault();
 
-    const bookAuthor = this.nodeAuthor.value;
-    const bookTitle = this.nodeTitle.value;
-    const bookPages = Math.abs(parseInt(this.nodePages.value));
-    const bookStatus = this.nodeRead.checked;
+    const bookAuthor = nodeAuthor.value;
+    const bookTitle = nodeTitle.value;
+    const bookPages = Math.abs(parseInt(nodePages.value));
+    const bookStatus = nodeRead.checked;
 
-    this.Library.addBookToLibrary(bookTitle, bookAuthor, bookPages, bookStatus);
-    this.clearForm();
-    this.init();
+    library.addBookToLibrary(bookTitle, bookAuthor, bookPages, bookStatus);
+    clearForm();
+    init();
   }
 
-  init() {
-    this.renderBooks();
-    this.renderTotalBooks();
-    this.addClick();
-    this.addSubmit();
+  function init() {
+    renderBooks();
+    renderTotalBooks();
+    addClick();
+    addSubmit();
   }
-}
 
-new UI().init();
+  return { init };
+})();
+
+UI.init();
