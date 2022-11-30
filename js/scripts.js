@@ -1,5 +1,3 @@
-"use strict";
-
 class Book {
   title;
   author;
