@@ -16,7 +16,7 @@
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: var(--cl-lg);
   background-color: var(--cl-bg);
 }
@@ -24,15 +24,19 @@ body {
 main {
   max-width: 1276px;
   position: relative;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 header {
   max-width: 960px;
-  margin: 30px auto;
+  margin: 8px auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* padding: 8px; */
+  width: 100%;
 }
 
 header > div p {
@@ -62,7 +66,9 @@ header button {
 
 section {
   max-width: 960px;
-  margin: 30px auto;
+  margin: 8px auto;
+  width: 100%;
+  flex-grow: 1;
 }
 
 table {
